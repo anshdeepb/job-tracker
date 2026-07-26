@@ -16,9 +16,10 @@ import type { Application } from "@/types/Application"
 interface ApplicationTableProps {
     applications: Application[]
     onDelete: (id: number) => void
+    onRowClick: (application : Application) => void
 }
 
-export default function ApplicationsTable({applications, onDelete} : ApplicationTableProps) {
+export default function ApplicationsTable({applications, onDelete, onRowClick} : ApplicationTableProps) {
     return(
         <Table>
             <TableHeader>
@@ -39,7 +40,7 @@ export default function ApplicationsTable({applications, onDelete} : Application
                     </TableRow>
                 )}
                 {applications.map((app) => (
-                    <TableRow key={app.id}>
+                    <TableRow key={app.id} onClick={() => onRowClick(app)}>
                         <TableCell className="font-medium">{app.company}</TableCell>
                         <TableCell>{app.role}</TableCell>
                         <TableCell><StatusBadge status={app.status} /></TableCell>

@@ -5,17 +5,16 @@ import StatsBar from "@/components/StatsBar"
 import Header from "@/components/Header"
 import ApplicationsTable from './components/ApplicationTable'
 import AddApplicationDialog from './components/AddApplicationDialog'
-
-// const mockApplications: Application[] = [
-//   { id: 1, company: "Anthropic", role: "AI Engineer", status: "interviewing", dateApplied: "2026-07-10" },
-//   { id: 2, company: "Vercel", role: "Frontend Engineer", status: "offer", dateApplied: "2026-06-15" },
-//   { id: 3, company: "Notion", role: "Software Engineer", status: "applied", dateApplied: "2026-07-20" },
-// ]
+import ApplicationDetails from './components/ApplicationDetails'
 
 function App() {
 
   const [applications, setApplications] = useState<Application[]>([])
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
+
+  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
+
+
 
   const handleAdd = (newApplication: Application) => {
   setApplications((prev) => [...prev, newApplication])
@@ -23,6 +22,12 @@ function App() {
 
 const handleDelete = (id: number) => {
   setApplications((prev) => prev.filter((app) => app.id !== id))
+}
+
+const handleUpdate = (updatedApplication: Application) => {
+  setApplications((prev) =>
+    prev.map((app) => (app.id === updatedApplication.id ? updatedApplication : app))
+  )
 }
   return (
     <div className='min-h-screen bg-slate-50 px-6 py-8'>
@@ -33,10 +38,17 @@ const handleDelete = (id: number) => {
         onClose={() => setIsDialogOpen(false)}
         onAdd={handleAdd}
       />
+      <ApplicationDetails
+        key={selectedApplication?.id}
+        application={selectedApplication}
+        onClose={() => setSelectedApplication(null)}
+        onUpdate={handleUpdate}
+      />
       <div className='mt-6'>
         <ApplicationsTable
           applications={applications}
           onDelete={handleDelete}
+          onRowClick={(app) => setSelectedApplication(app)}
         />
       </div>
     </div>
