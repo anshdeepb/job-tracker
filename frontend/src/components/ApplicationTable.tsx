@@ -46,7 +46,7 @@ export default function ApplicationsTable({applications, onDelete, onRowClick} :
                         <TableCell><StatusBadge status={app.status} /></TableCell>
                         <TableCell>{app.dateApplied}</TableCell>
                         <TableCell className="text-right">
-                            <Button variant="ghost" size="icon" onClick={() => onDelete(app.id)}>
+                            <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); onDelete(app.id) }}>
                                 <Trash2 className="h-4 w-4" />
                             </Button>
                         </TableCell>
