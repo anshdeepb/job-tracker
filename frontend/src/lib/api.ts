@@ -15,3 +15,12 @@ export async function addApplication(data: Omit<Application, "id">): Promise<App
   })
   return res.json()
 }
+
+export async function updateApplication(id: number, data: Omit<Application, "id">): Promise<Application> {
+  const res = await fetch(`${BASE_URL}/applications/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+  return res.json()
+}

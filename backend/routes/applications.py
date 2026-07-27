@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -33,3 +33,16 @@ def create_application(application: ApplicationCreate, db: Session = Depends(get
     db.commit()
     db.refresh(new_application)
     return new_application
+
+@app.patch("/applications/{id}", response_model=ApplicationOut)
+def update_application(id: int, application: ApplicationCreate, db: Session = Depends(get_db)):
+    db_application = db.query(Applications).filter(Applications.id == id).first()
+    if db_application is None:
+        raise HTTPException(status_code=404, detail="Application not found")
+
+    for key, value in application.model_dump().items():
+        setattr(db_application, key, value)
+
+    db.commit()
+    db.refresh(db_application)
+    return db_application
