@@ -6,6 +6,8 @@ import Header from "@/components/Header"
 import ApplicationsTable from './components/ApplicationTable'
 import AddApplicationDialog from './components/AddApplicationDialog'
 import ApplicationDetails from './components/ApplicationDetails'
+import { useEffect } from 'react'
+import { getApplications, addApplication } from '@/lib/api'
 
 function App() {
 
@@ -14,10 +16,15 @@ function App() {
 
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
 
+useEffect(() => {
+  getApplications().then(setApplications)
+}, [])
 
 
-  const handleAdd = (newApplication: Application) => {
-  setApplications((prev) => [...prev, newApplication])
+
+const handleAdd = async (newApplication: Application) => {
+  const created = await addApplication(newApplication)
+  setApplications((prev) => [...prev, created])
 }
 
 const handleDelete = (id: number) => {
