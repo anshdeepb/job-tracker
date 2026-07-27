@@ -7,7 +7,7 @@ import ApplicationsTable from './components/ApplicationTable'
 import AddApplicationDialog from './components/AddApplicationDialog'
 import ApplicationDetails from './components/ApplicationDetails'
 import { useEffect } from 'react'
-import { getApplications, addApplication, updateApplication } from '@/lib/api'
+import { getApplications, addApplication, updateApplication, deleteApplication } from '@/lib/api'
 
 function App() {
 
@@ -27,7 +27,8 @@ const handleAdd = async (newApplication: Application) => {
   setApplications((prev) => [...prev, created])
 }
 
-const handleDelete = (id: number) => {
+const handleDelete = async (id: number) => {
+  await deleteApplication(id)
   setApplications((prev) => prev.filter((app) => app.id !== id))
 }
 

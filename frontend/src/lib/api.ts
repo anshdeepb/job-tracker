@@ -24,3 +24,9 @@ export async function updateApplication(id: number, data: Omit<Application, "id"
   })
   return res.json()
 }
+
+export async function deleteApplication(id: number): Promise<void> {
+  await fetch(`${BASE_URL}/applications/${id}`, {
+    method: "DELETE",
+  })
+}

@@ -46,3 +46,13 @@ def update_application(id: int, application: ApplicationCreate, db: Session = De
     db.commit()
     db.refresh(db_application)
     return db_application
+
+@app.delete("/applications/{id}")
+def delete_application(id: int, db: Session = Depends(get_db)):
+    db_item = db.query(Applications).filter(Applications.id == id).first()
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Application not found")
+
+    db.delete(db_item)
+    db.commit()
+    return {"detail": "Application deleted"}
