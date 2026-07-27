@@ -8,6 +8,7 @@ import AddApplicationDialog from './components/AddApplicationDialog'
 import ApplicationDetails from './components/ApplicationDetails'
 import { useEffect } from 'react'
 import { getApplications, addApplication, updateApplication, deleteApplication } from '@/lib/api'
+import StatusFilter from "@/components/StatusFilter"
 
 function App() {
 
@@ -15,6 +16,13 @@ function App() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
 
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
+
+  const [statusFilter, setStatusFilter] = useState<Application["status"] | "all">("all")
+
+  const filteredApplications =
+  statusFilter === "all"
+    ? applications
+    : applications.filter((app) => app.status === statusFilter)
 
 useEffect(() => {
   getApplications().then(setApplications)
@@ -38,6 +46,7 @@ const handleUpdate = async (updatedApplication: Application) => {
     prev.map((app) => (app.id === updated.id ? updated : app))
   )
 }
+
   return (
     <div className='min-h-screen bg-slate-50 px-6 py-8'>
       <Header onAddClick={() => setIsDialogOpen(true)} />
@@ -54,8 +63,9 @@ const handleUpdate = async (updatedApplication: Application) => {
         onUpdate={handleUpdate}
       />
       <div className='mt-6'>
+        <StatusFilter currentFilter={statusFilter} onFilterChange={setStatusFilter} />
         <ApplicationsTable
-          applications={applications}
+          applications={filteredApplications}
           onDelete={handleDelete}
           onRowClick={(app) => setSelectedApplication(app)}
         />
