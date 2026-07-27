@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import type { Application } from "@/types/Application"
+import { Textarea } from "@/components/ui/textarea"
 
 interface ApplicationDetailsProps {
   application: Application | null
@@ -44,9 +45,10 @@ function ApplicationDetailsContent({
   onUpdate: (application: Application) => void
 }) {
   const [selectedStatus, setSelectedStatus] = useState<Application["status"]>(application.status)
+  const [notes, setNotes] = useState<string>(application.notes ?? "")
 
   const handleUpdate = () => {
-    const updated: Application = { ...application, status: selectedStatus }
+    const updated: Application = { ...application, status: selectedStatus, notes: notes}
     onUpdate(updated)
     onClose()
   }
@@ -108,7 +110,7 @@ function ApplicationDetailsContent({
 
           <div>
             <p className="text-xs text-muted-foreground">Notes</p>
-            <p className="text-sm">{application.notes || "—"}</p>
+            <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Referral, interview prep, etc." className="mt-1" rows={2} />
           </div>
         </div>
 

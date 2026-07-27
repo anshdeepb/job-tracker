@@ -11,7 +11,7 @@ export default function StatsBar({ applications } : StatsBarProps){
     const interviewing = applications.filter(a => a.status == "interviewing").length
     const offers = applications.filter(a => a.status == "offer").length
     const responded = applications.filter(a => a.status !== "applied").length
-    const responseRate = total ? Math.round((responded / total) * 100) : 0
+    const responseRate = total ? Math.round((responded / total) * 100) + "%" : 0
 
     const stats = [
         {label: "Total Applications", value: total},
