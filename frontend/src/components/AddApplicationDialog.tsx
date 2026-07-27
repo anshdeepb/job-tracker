@@ -114,7 +114,7 @@ export default function AddApplicationDialog({open, onClose, onAdd} : AddApplica
 
           <div>
             <Label htmlFor="notes">Notes</Label>
-            <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Referral, interview prep, etc." className="mt-1" rows={2} />
+            <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Referral, interview prep, etc." className="mt-1 h-24 overflow-y-auto resize-none" rows={2} />
           </div>
         </div>
         <div className="flex justify-end gap-2 mt-4">
