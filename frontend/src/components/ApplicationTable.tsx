@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table"
 
 import { Button } from "@/components/ui/button"
-import { Trash2 } from "lucide-react"
+import { Trash2, ArrowUp, ArrowDown, ChevronsUpDown } from "lucide-react"
 import StatusBadge from "@/components/StatusBadge"
 
 import type { Application } from "@/types/Application"
@@ -17,9 +17,11 @@ interface ApplicationTableProps {
     applications: Application[]
     onDelete: (id: number) => void
     onRowClick: (application : Application) => void
+    onSortToggle: () => void
+    sortOrder: "asc" | "desc" | null
 }
 
-export default function ApplicationsTable({applications, onDelete, onRowClick} : ApplicationTableProps) {
+export default function ApplicationsTable({applications, onDelete, onRowClick, onSortToggle, sortOrder} : ApplicationTableProps) {
     return(
         <Table>
             <TableHeader>
@@ -27,7 +29,14 @@ export default function ApplicationsTable({applications, onDelete, onRowClick} :
                 <TableHead>Company</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Date Applied</TableHead>
+                <TableHead onClick={onSortToggle} className="cursor-pointer select-none">
+                    <div className="flex items-center gap-1">
+                        Date Applied
+                        {sortOrder === "asc" && <ArrowUp className="h-3.5 w-3.5" />}
+                        {sortOrder === "desc" && <ArrowDown className="h-3.5 w-3.5" />}
+                        {sortOrder === null && <ChevronsUpDown className="h-3.5 w-3.5 text-muted-foreground" />}
+                    </div>
+                </TableHead>
                 <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
             </TableHeader>

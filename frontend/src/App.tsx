@@ -17,6 +17,7 @@ function App() {
 
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
 
+  //filtering and sorting
   const [statusFilter, setStatusFilter] = useState<Application["status"] | "all">("all")
 
   const filteredApplications =
@@ -24,10 +25,28 @@ function App() {
     ? applications
     : applications.filter((app) => app.status === statusFilter)
 
-useEffect(() => {
-  getApplications().then(setApplications)
-}, [])
+  useEffect(() => {
+    getApplications().then(setApplications)
+  }, [])
 
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null)
+
+  const sortedApplications = 
+  sortOrder === null
+    ? filteredApplications
+    : filteredApplications.slice().sort((a, b) => {
+        if (sortOrder === "asc") {
+          return a.dateApplied < b.dateApplied ? -1 : 1
+        } else {
+          return a.dateApplied > b.dateApplied ? -1 : 1
+        }
+      })
+
+  const handleSortToggle = () => {
+    if (sortOrder === null) setSortOrder("asc")
+    else if (sortOrder === "asc") setSortOrder("desc")
+    else setSortOrder(null)
+  }
 
 
 const handleAdd = async (newApplication: Application) => {
@@ -65,9 +84,11 @@ const handleUpdate = async (updatedApplication: Application) => {
       <div className='mt-6'>
         <StatusFilter currentFilter={statusFilter} onFilterChange={setStatusFilter} />
         <ApplicationsTable
-          applications={filteredApplications}
+          applications={sortedApplications}
           onDelete={handleDelete}
           onRowClick={(app) => setSelectedApplication(app)}
+          onSortToggle={handleSortToggle}
+          sortOrder={sortOrder}
         />
       </div>
     </div>
